@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+  <Project Path="FinancialGoalsManager.API/FinancialGoalsManager.API.csproj" />
+  <Project Path="FinancialGoalsManager.Application/FinancialGoalsManager.Application.csproj" />
+  <Project Path="FinancialGoalsManager.Core/FinancialGoalsManager.Core.csproj" />
+  <Project Path="FinancialGoalsManager.Infrastructure/FinancialGoalsManager.Infrastructure.csproj" />
+</Solution>
