@@ -1,4 +1,3 @@
-using System;
 using FinancialGoalsManager.Core.Enums;
 
 namespace FinancialGoalsManager.Application.DTO.InputModels
@@ -7,8 +6,8 @@ namespace FinancialGoalsManager.Application.DTO.InputModels
         Guid Id,
         string Title,
         decimal AmountGoal,
-        DateTime? Deadline = null,
-        decimal? IdealMonthlyDeposit = null,
+        DateTime Deadline,
+        decimal IdealMonthlyDeposit,
         GoalStatus Status = GoalStatus.InProgress
     );
 }

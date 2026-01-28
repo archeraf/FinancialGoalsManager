@@ -1,11 +1,12 @@
 ﻿using FinancialGoalsManager.Core.Contracts.Repository;
+using FinancialGoalsManager.Core.Entities;
 using FinancialGoalsManager.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace FinancialGoalsManager.Infrastructure.Persistence.Repository
 {
-    public class GenericRepository<T> : IRepository<T> where T : class
+    public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly SqlServerContext _context;
         private readonly DbSet<T> _dbSet;
@@ -44,25 +45,27 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Repository
             {
                 query = query.Include(item);
             }
-            return await query.AsNoTracking().FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id") == id);
+            return await query.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<T> UpdateAsync(T entity)
         {
-            var existingEntity = await _dbSet.FindAsync(EF.Property<Guid>(entity, "Id"));
-            if (existingEntity == null)
-            {
-                throw new InvalidOperationException("Entity not found in the database.");
-            }
-            _context.Entry(existingEntity).CurrentValues.SetValues(entity);
-            await _context.SaveChangesAsync();
+            var existingEntity = _dbSet.SingleOrDefault(e => e.Id.Equals(entity.Id));
 
-            return entity;
+            if (existingEntity != null)
+            {
+                _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+
+                return entity;
+            }
+
+            return null;
         }
 
         public async Task DeleteByAsync(T entity)
         {
-            var existingEntity = _dbSet.Find(EF.Property<Guid>(entity, "Id"));
+            var existingEntity = _dbSet.Find(entity.Id);
             if (existingEntity == null)
             {
                 throw new InvalidOperationException("Entity not found in the database.");
@@ -74,7 +77,7 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Repository
 
         public Task<bool> ExistsAsync(Guid id)
         {
-            return _dbSet.AnyAsync(e => EF.Property<Guid>(e, "Id") == id);
+            return _dbSet.AnyAsync(e => e.Id == id);
         }
 
         public async Task<bool> SaveChangesAsync()

@@ -2,7 +2,7 @@
 
 namespace FinancialGoalsManager.Core.Entities
 {
-    public class Transaction
+    public class Transaction : BaseEntity
     {
         private Transaction()
         {
@@ -11,7 +11,6 @@ namespace FinancialGoalsManager.Core.Entities
             IsDeleted = false;
         }
 
-        public Guid Id { get; private set; }
         public decimal Amount { get; private set; }
         public TransactionType Type { get; private set; }
         public DateTime TransactionDate { get; private set; }

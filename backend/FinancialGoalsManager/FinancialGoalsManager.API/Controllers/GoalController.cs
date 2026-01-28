@@ -45,7 +45,7 @@ namespace FinancialGoalsManager.API.Controllers
                 return BadRequest("Create model cannot be null.");
 
             var created = await _goalsService.CreateGoalAsync(createModel);
-            // Não há endpoint GET por id no serviço; retornamos 201 com o recurso criado no body.
+
             return Created(string.Empty, created);
         }
 

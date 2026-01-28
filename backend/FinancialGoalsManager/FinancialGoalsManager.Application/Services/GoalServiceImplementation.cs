@@ -25,6 +25,7 @@ namespace FinancialGoalsManager.Application.Services
             return new GoalViewModel(
                 goalEntity.Id,
                 goalEntity.Title,
+                goalEntity.Amount,
                 goalEntity.AmountGoal,
                 goalEntity.Deadline,
                 goalEntity.IdealMonthlyDeposit,
@@ -49,6 +50,7 @@ namespace FinancialGoalsManager.Application.Services
             return goals.Select(goal => new GoalViewModel(
                 goal.Id,
                 goal.Title,
+                goal.Amount,
                 goal.AmountGoal,
                 goal.Deadline,
                 goal.IdealMonthlyDeposit,
@@ -69,7 +71,7 @@ namespace FinancialGoalsManager.Application.Services
 
         public async Task<GoalViewModel> CreateGoalAsync(CreateGoalInputModel goal)
         {
-            var goalEntity = Goal.Create(goal.Title, goal.AmountGoal, goal.IdealMonthlyDeposit, goal.Deadline);
+            var goalEntity = Goal.Create(goal.Title, goal.Amount, goal.AmountGoal, goal.Deadline, goal.IdealMonthlyDeposit);
             await _goalRepository.AddAsync(goalEntity);
 
             if (await _goalRepository.SaveChangesAsync())
@@ -77,6 +79,7 @@ namespace FinancialGoalsManager.Application.Services
                 return new GoalViewModel(
                     goalEntity.Id,
                     goalEntity.Title,
+                    goalEntity.Amount,
                     goalEntity.AmountGoal,
                     goalEntity.Deadline,
                     goalEntity.IdealMonthlyDeposit,
@@ -115,6 +118,11 @@ namespace FinancialGoalsManager.Application.Services
                 throw new Exception("Goal not found.");
             }
 
+            goalEntity.UpdateTitle(goal.Title);
+            goalEntity.UpdateAmountGoal(goal.AmountGoal);
+            goalEntity.UpdateDeadline(goal.Deadline);
+            goalEntity.UpdateIdealMonthlyDeposit(goal.IdealMonthlyDeposit);
+
             await _goalRepository.UpdateAsync(goalEntity);
 
             if (await _goalRepository.SaveChangesAsync())
@@ -122,6 +130,7 @@ namespace FinancialGoalsManager.Application.Services
                 return new GoalViewModel(
                     goalEntity.Id,
                     goalEntity.Title,
+                    goalEntity.Amount,
                     goalEntity.AmountGoal,
                     goalEntity.Deadline,
                     goalEntity.IdealMonthlyDeposit,

@@ -2,7 +2,7 @@ using FinancialGoalsManager.Core.Enums;
 
 namespace FinancialGoalsManager.Core.Entities
 {
-    public class Goal
+    public class Goal : BaseEntity
     {
         private readonly List<Transaction> _transactions;
 
@@ -15,11 +15,10 @@ namespace FinancialGoalsManager.Core.Entities
             Status = GoalStatus.InProgress;
         }
 
-        public Guid Id { get; private set; }
         public string Title { get; private set; } = string.Empty;
         public decimal Amount { get; set; }
         public decimal AmountGoal { get; private set; }
-        public DateTime? Deadline { get; private set; }
+        public DateTime Deadline { get; private set; }
         public decimal IdealMonthlyDeposit { get; private set; }
         public GoalStatus Status { get; private set; }
         public IReadOnlyCollection<Transaction> Transactions => _transactions.AsReadOnly();
@@ -163,16 +162,16 @@ namespace FinancialGoalsManager.Core.Entities
             CompleteIfTargetReached();
         }
 
-        public void UpdateDeadline(DateTime? newDeadline)
+        public void UpdateDeadline(DateTime newDeadline)
         {
             EnsureNotDeleted();
             Deadline = newDeadline;
         }
 
-        public void UpdateIdealMonthlyDeposit(decimal? newIdeal)
+        public void UpdateIdealMonthlyDeposit(decimal newIdeal)
         {
             EnsureNotDeleted();
-            if (newIdeal.HasValue && newIdeal <= 0)
+            if (newIdeal <= 0)
                 throw new ArgumentOutOfRangeException(nameof(newIdeal), "Ideal monthly deposit must be greater than zero.");
 
             IdealMonthlyDeposit = newIdeal;

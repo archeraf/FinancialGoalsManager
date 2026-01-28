@@ -1,3 +1,4 @@
+using FinancialGoalsManager.API.Filters;
 using FinancialGoalsManager.API.Middleware;
 using FinancialGoalsManager.Infrastructure.Persistence.Context;
 using FinancialGoalsManager.Infrastructure.Persistence.DependencyInjection;
@@ -8,7 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers()
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidateModelFilter>();
+})
     .AddJsonOptions(opt =>
         opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
@@ -17,6 +21,7 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
@@ -34,9 +39,7 @@ using (var scope = app.Services.CreateScope())
         try
         {
             logger.LogInformation("Retrying to apply database migrations...");
-
             context.Database.Migrate();
-
             logger.LogInformation("Database ready!");
             break;
         }
@@ -55,6 +58,8 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -5,9 +5,10 @@ namespace FinancialGoalsManager.Application.DTO.ViewModels
     public record GoalViewModel(
         Guid Id,
         string Title,
+        decimal Amount,
         decimal AmountGoal,
-        DateTime? Deadline,
-        decimal? IdealMonthlyDeposit,
+        DateTime Deadline,
+        decimal IdealMonthlyDeposit,
         GoalStatus Status,
         IReadOnlyList<TransactionViewModel> Transactions,
         DateTime CreationDate,
