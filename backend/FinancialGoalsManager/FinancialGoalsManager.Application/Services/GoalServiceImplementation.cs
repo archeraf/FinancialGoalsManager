@@ -69,7 +69,7 @@ namespace FinancialGoalsManager.Application.Services
 
         public async Task<GoalViewModel> CreateGoalAsync(CreateGoalInputModel goal)
         {
-            var goalEntity = Goal.Create(goal.Title, goal.AmountGoal, goal.Deadline, goal.IdealMonthlyDeposit);
+            var goalEntity = Goal.Create(goal.Title, goal.AmountGoal, goal.IdealMonthlyDeposit, goal.Deadline);
             await _goalRepository.AddAsync(goalEntity);
 
             if (await _goalRepository.SaveChangesAsync())

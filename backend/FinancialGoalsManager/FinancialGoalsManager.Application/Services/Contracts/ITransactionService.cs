@@ -6,9 +6,10 @@ namespace FinancialGoalsManager.Application.Services.Contracts
     public interface ITransactionService
     {
         public Task<IEnumerable<TransactionViewModel>> GetTransactions();
+        public Task<TransactionViewModel> GetTransactionsById(Guid id);
         public Task<TransactionViewModel> CreateTransaction(CreateTranscationInputModel transaction);
         public Task<TransactionViewModel> UpdateTransaction(UpdateTranscationInputModel transaction);
-        public void DeleteTransaction(Guid transactionId);
+        public Task DeleteTransaction(Guid transactionId);
 
     }
 }

@@ -20,7 +20,7 @@ namespace FinancialGoalsManager.Core.Entities
         public decimal Amount { get; set; }
         public decimal AmountGoal { get; private set; }
         public DateTime? Deadline { get; private set; }
-        public decimal? IdealMonthlyDeposit { get; private set; }
+        public decimal IdealMonthlyDeposit { get; private set; }
         public GoalStatus Status { get; private set; }
         public IReadOnlyCollection<Transaction> Transactions => _transactions.AsReadOnly();
         public DateTime CreationDate { get; private set; }
@@ -29,7 +29,7 @@ namespace FinancialGoalsManager.Core.Entities
 
         #region Business methods
 
-        public static Goal Create(string title, decimal amount, decimal amountGoal, DateTime? deadline = null, decimal? idealMonthlyDeposit = null)
+        public static Goal Create(string title, decimal amount, decimal amountGoal, DateTime deadline, decimal idealMonthlyDeposit)
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentException("Title cannot be null or empty.", nameof(title));
@@ -37,7 +37,7 @@ namespace FinancialGoalsManager.Core.Entities
             if (amountGoal <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amountGoal), "Amount goal must be greater than zero.");
 
-            if (idealMonthlyDeposit.HasValue && idealMonthlyDeposit <= 0)
+            if (idealMonthlyDeposit <= 0)
                 throw new ArgumentOutOfRangeException(nameof(idealMonthlyDeposit), "Ideal monthly deposit must be greater than zero.");
 
             var goal = new Goal

@@ -18,8 +18,15 @@ namespace FinancialGoalsManager.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetGoals()
         {
-            var goals = await _goalsService.GetGoalsAsync();
-            return Ok(goals);
+            try
+            {
+                var goals = await _goalsService.GetGoalsAsync();
+                return Ok(goals);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
         }
 
         [HttpGet("{id:guid}")]

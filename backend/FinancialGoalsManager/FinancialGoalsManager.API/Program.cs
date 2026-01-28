@@ -1,3 +1,4 @@
+using FinancialGoalsManager.API.Middleware;
 using FinancialGoalsManager.Infrastructure.Persistence.Context;
 using FinancialGoalsManager.Infrastructure.Persistence.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -67,7 +68,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
-
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
