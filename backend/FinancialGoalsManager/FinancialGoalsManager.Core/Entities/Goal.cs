@@ -60,7 +60,7 @@ namespace FinancialGoalsManager.Core.Entities
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount), "Deposit amount must be greater than zero.");
 
-            var transaction = Transaction.Create(amount, TransactionType.Deposit, transactionDate ?? DateTime.UtcNow);
+            var transaction = Transaction.Create(this.Id, amount, TransactionType.Deposit, transactionDate ?? DateTime.UtcNow);
             _transactions.Add(transaction);
 
             CompleteIfTargetReached();
@@ -74,7 +74,7 @@ namespace FinancialGoalsManager.Core.Entities
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount), "Withdrawal amount must be greater than zero.");
 
-            var t = Transaction.Create(amount, TransactionType.Withdraw, transactionDate ?? DateTime.UtcNow);
+            var t = Transaction.Create(this.Id, amount, TransactionType.Withdraw, transactionDate ?? DateTime.UtcNow);
             _transactions.Add(t);
         }
 

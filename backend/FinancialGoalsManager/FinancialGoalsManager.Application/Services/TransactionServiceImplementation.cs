@@ -1,7 +1,7 @@
 ﻿using FinancialGoalsManager.Application.DTO.InputModels;
 using FinancialGoalsManager.Application.DTO.ViewModels;
 using FinancialGoalsManager.Application.Services.Contracts;
-using FinancialGoalsManager.Core.Contracts.Repository;
+using FinancialGoalsManager.Core.Contracts.Repository.Generic;
 using FinancialGoalsManager.Core.Entities;
 
 namespace FinancialGoalsManager.Application.Services
@@ -53,6 +53,7 @@ namespace FinancialGoalsManager.Application.Services
         public async Task<TransactionViewModel> CreateTransaction(CreateTranscationInputModel transaction)
         {
             var transactionEntity = Transaction.Create(
+                transaction.GoalId ?? Guid.Empty,
                 transaction.Amount,
                 transaction.Type,
                 transaction.TransactionDate ?? DateTime.UtcNow

@@ -19,6 +19,11 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Configuration
                    .IsRequired()
                    .HasMaxLength(200);
 
+            builder.HasMany(g => g.Transactions)
+                   .WithOne()
+                   .HasForeignKey(t => t.GoalId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
             builder.Property(g => g.AmountGoal)
                      .IsRequired()
                      .HasColumnType("decimal(18,2)");

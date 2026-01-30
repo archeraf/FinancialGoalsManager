@@ -1,6 +1,6 @@
-﻿using FinancialGoalsManager.Core.Contracts.Repository;
+﻿using FinancialGoalsManager.Core.Contracts.Repository.Generic;
 using FinancialGoalsManager.Infrastructure.Persistence.Context;
-using FinancialGoalsManager.Infrastructure.Persistence.Repository;
+using FinancialGoalsManager.Infrastructure.Persistence.Repository.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

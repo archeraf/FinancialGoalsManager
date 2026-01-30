@@ -9,15 +9,17 @@ namespace FinancialGoalsManager.Core.Entities
             Id = Guid.NewGuid();
             TransactionDate = DateTime.UtcNow;
             IsDeleted = false;
+            GoalId = Guid.Empty;
         }
 
         public decimal Amount { get; private set; }
         public TransactionType Type { get; private set; }
         public DateTime TransactionDate { get; private set; }
         public bool IsDeleted { get; private set; }
+        public Guid GoalId { get; set; }
 
         #region Builders
-        public static Transaction Create(decimal amount, TransactionType type, DateTime transactionDate)
+        public static Transaction Create(Guid goalId, decimal amount, TransactionType type, DateTime transactionDate)
         {
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be greater than zero.");
@@ -27,6 +29,7 @@ namespace FinancialGoalsManager.Core.Entities
 
             return new Transaction
             {
+                GoalId = goalId,
                 Amount = amount,
                 Type = type,
                 TransactionDate = transactionDate

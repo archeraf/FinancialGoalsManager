@@ -1,7 +1,7 @@
 ﻿using FinancialGoalsManager.Application.DTO.InputModels;
 using FinancialGoalsManager.Application.DTO.ViewModels;
 using FinancialGoalsManager.Application.Services.Contracts;
-using FinancialGoalsManager.Core.Contracts.Repository;
+using FinancialGoalsManager.Core.Contracts.Repository.Generic;
 using FinancialGoalsManager.Core.Entities;
 
 namespace FinancialGoalsManager.Application.Services
@@ -17,7 +17,7 @@ namespace FinancialGoalsManager.Application.Services
 
         public async Task<GoalViewModel> GetGoalByIdAsync(Guid goalId)
         {
-            var goalEntity = await _goalRepository.GetByIdAsync(goalId);
+            var goalEntity = await _goalRepository.GetByIdAsync(goalId, p => p.Transactions);
             if (goalEntity == null)
             {
                 throw new Exception("Goal not found.");

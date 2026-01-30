@@ -1,10 +1,10 @@
-﻿using FinancialGoalsManager.Core.Contracts.Repository;
+﻿using FinancialGoalsManager.Core.Contracts.Repository.Generic;
 using FinancialGoalsManager.Core.Entities;
 using FinancialGoalsManager.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace FinancialGoalsManager.Infrastructure.Persistence.Repository
+namespace FinancialGoalsManager.Infrastructure.Persistence.Repository.Generic
 {
     public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     {
@@ -20,7 +20,6 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Repository
         public async Task<T> AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
 
             return entity;
         }
@@ -33,7 +32,7 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Repository
             {
                 query = query.Include(item);
             }
-            return await query.AsNoTracking().ToListAsync();
+            return await query.ToListAsync();
 
         }
 
@@ -55,7 +54,6 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Repository
             if (existingEntity != null)
             {
                 _context.Entry(existingEntity).CurrentValues.SetValues(entity);
-                await _context.SaveChangesAsync();
 
                 return entity;
             }
@@ -63,7 +61,7 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Repository
             return null;
         }
 
-        public async Task DeleteByAsync(T entity)
+        public virtual async Task DeleteAsync(T entity)
         {
             var existingEntity = _dbSet.Find(entity.Id);
             if (existingEntity == null)
@@ -71,7 +69,6 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Repository
                 throw new InvalidOperationException("Entity not found in the database.");
             }
             _dbSet.Remove(existingEntity);
-            await _context.SaveChangesAsync();
 
         }
 
