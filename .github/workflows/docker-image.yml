@@ -1,0 +1,68 @@
+name: CI/CD Pipeline - Financial Goals Manager
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-test-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Setup do .NET (necessário para rodar o 'dotnet test')
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # 3. Subir o Banco de Dados (Isolation)
+      - name: Spin up SQL Server
+        run: docker-compose up -d db-goals
+
+      # 4. Aguardar o SQL Server ficar saudável
+      - name: Wait for SQL Server Healthcheck
+        run: |
+          echo "Aguardando SQL Server iniciar..."
+          until [ "$(docker inspect -f '{{.State.Health.Status}}' financialgoalsmanager_sqlserver)" == "healthy" ]; do
+            sleep 5
+          done
+          echo "SQL Server está pronto!"
+
+      # 5. Executar Migrations e Testes de Integração
+      # Garante que a aplicação está funcional antes de gerar a imagem final
+      - name: Run Integration Tests
+        run: dotnet test --verbosity normal
+        env:
+          ConnectionStrings__DefaultConnection: "Server=localhost,1433;Database=FinancialGoalsManager;User Id=sa;Password=${{ secrets.DB_PASSWORD }};TrustServerCertificate=True;"
+
+      # 6. Login no Docker Hub
+      # Requer que você crie os Secrets DOCKERHUB_USERNAME e DOCKERHUB_TOKEN no GitHub
+      - name: Login to Docker Hub
+        if: github.event_name != 'pull_request' # Só faz login se não for um PR
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 7. Build e Push da Imagem da API
+      - name: Build and Push API Image
+        if: github.event_name != 'pull_request'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: FinancialGoalsManager.API/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/financialgoalsmanager-api:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/financialgoalsmanager-api:${{ github.sha }}
+
+      # 8. Limpeza do ambiente
+      - name: Stop containers
+        if: always()
+        run: docker-compose down
