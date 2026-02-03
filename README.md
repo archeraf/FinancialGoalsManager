@@ -27,19 +27,19 @@ docker-compose up -d
 
 ### Goals
 
-GET    /api/goals → List all goals 
-GET    /api/goals/{id} → Get goal by id 
-POST   /api/goals → Create goal 
-PUT    /api/goals/{id} → Update goal 
-DELETE /api/goals/{id} → Delete goal
+GET    /api/goals → List all goals </br>
+GET    /api/goals/{id} → Get goal by id  </br>
+POST   /api/goals → Create goal  </br>
+PUT    /api/goals/{id} → Update goal  </br>
+DELETE /api/goals/{id} → Delete goal </br>
 
 ### Transactions
 
-GET    /api/transaction        → List all transactions 
-GET    /api/transaction/{id}   → Get transaction by id 
-POST   /api/transaction        → Create transaction 
-PUT    /api/transaction/{id}   → Update transaction 
-DELETE /api/transaction/{id}   → Delete transaction
+GET    /api/transaction        → List all transactions  </br>
+GET    /api/transaction/{id}   → Get transaction by id  </br>
+POST   /api/transaction        → Create transaction  </br>
+PUT    /api/transaction/{id}   → Update transaction  </br>
+DELETE /api/transaction/{id}   → Delete transaction </br>
 
 ---
 
