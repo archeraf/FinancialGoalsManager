@@ -15,7 +15,7 @@ namespace FinancialGoalsManager.Application.Validators
                 .MaximumLength(200)
                 .WithMessage("Title must not exceed 200 characters.");
 
-            RuleFor(x => x.AmountGoal)
+            RuleFor(x => x.AmountGoal.Amount)
                 .GreaterThan(0)
                 .WithMessage("AmountGoal must be greater than zero.")
                 .PrecisionScale(18, 2, ignoreTrailingZeros: true)
@@ -25,7 +25,7 @@ namespace FinancialGoalsManager.Application.Validators
                 .GreaterThan(DateTime.UtcNow)
                 .WithMessage("Deadline must be in the future.");
 
-            RuleFor(x => x.IdealMonthlyDeposit)
+            RuleFor(x => x.IdealMonthlyDeposit.Amount)
                 .GreaterThan(0)
                 .WithMessage("IdealMonthlyDeposit must be greater than zero.")
                 .PrecisionScale(18, 2, ignoreTrailingZeros: true)

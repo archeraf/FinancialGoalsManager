@@ -7,7 +7,6 @@ public class SqlServerContextFactory : IDesignTimeDbContextFactory<SqlServerCont
     public SqlServerContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<SqlServerContext>();
-        // Use uma string de conexão temporária apenas para gerar a migration
         optionsBuilder.UseSqlServer("Server=localhost;Database=FinancialGoalsManager;User Id=sa;Password=MY_SENHA123!;TrustServerCertificate=True");
 
         return new SqlServerContext(optionsBuilder.Options);

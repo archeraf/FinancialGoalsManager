@@ -7,7 +7,7 @@ namespace FinancialGoalsManager.Application.Validators
     {
         public CreateTranscationInputModelValidator()
         {
-            RuleFor(x => x.Amount)
+            RuleFor(x => x.Amount.Amount)
                 .GreaterThan(0)
                 .WithMessage("Amount must be greater than zero.")
                 .PrecisionScale(18, 2, ignoreTrailingZeros: true)

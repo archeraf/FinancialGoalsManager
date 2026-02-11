@@ -32,9 +32,11 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Repository.Generic
             {
                 query = query.Include(item);
             }
+            
             return await query.ToListAsync();
 
         }
+
 
         public async Task<T?> GetByIdAsync(Guid id, params Expression<Func<T, object>>[] includes)
         {
@@ -61,7 +63,7 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Repository.Generic
             return null;
         }
 
-        public virtual async Task DeleteAsync(T entity)
+        public async Task DeleteAsync(T entity)
         {
             var existingEntity = _dbSet.Find(entity.Id);
             if (existingEntity == null)

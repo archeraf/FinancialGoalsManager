@@ -1,10 +1,12 @@
+using FinancialGoalsManager.Core.VO;
+
 namespace FinancialGoalsManager.Application.DTO.InputModels
 {
     public record CreateGoalInputModel(
         string Title,
-        decimal Amount,
-        decimal AmountGoal,
+        Payment Amount,
+        Payment AmountGoal,
         DateTime Deadline,
-        decimal IdealMonthlyDeposit
+        Payment IdealMonthlyDeposit
     );
 }

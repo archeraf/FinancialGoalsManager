@@ -1,4 +1,5 @@
 ﻿using FinancialGoalsManager.Core.Entities;
+using FinancialGoalsManager.Infrastructure.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinancialGoalsManager.Infrastructure.Persistence.Context
@@ -14,20 +15,8 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Goal>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Title).IsRequired();
-                entity.HasMany(e => e.Transactions).WithOne().HasForeignKey("GoalId");
-            });
-            modelBuilder.Entity<Transaction>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Amount).IsRequired();
-                entity.Property(e => e.Type).IsRequired();
-                entity.Property(e => e.TransactionDate).IsRequired();
-            });
+            modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+            modelBuilder.ApplyConfiguration(new GoalConfiguration());
         }
     }
 }

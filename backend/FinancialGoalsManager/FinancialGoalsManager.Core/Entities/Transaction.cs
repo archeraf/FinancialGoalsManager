@@ -1,4 +1,5 @@
 ﻿using FinancialGoalsManager.Core.Enums;
+using FinancialGoalsManager.Core.VO;
 
 namespace FinancialGoalsManager.Core.Entities
 {
@@ -10,22 +11,27 @@ namespace FinancialGoalsManager.Core.Entities
             TransactionDate = DateTime.UtcNow;
             IsDeleted = false;
             GoalId = Guid.Empty;
+            Amount = new Payment(0m, "BRL");
         }
 
-        public decimal Amount { get; private set; }
+        public Payment Amount { get; private set; }
         public TransactionType Type { get; private set; }
         public DateTime TransactionDate { get; private set; }
         public bool IsDeleted { get; private set; }
         public Guid GoalId { get; set; }
 
         #region Builders
-        public static Transaction Create(Guid goalId, decimal amount, TransactionType type, DateTime transactionDate)
+        public static Transaction Create(Guid goalId, Payment amount, TransactionType type, DateTime transactionDate)
         {
             if (amount <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be greater than zero.");
+            }
 
             if (transactionDate == default)
+            {
                 transactionDate = DateTime.UtcNow;
+            }
 
             return new Transaction
             {

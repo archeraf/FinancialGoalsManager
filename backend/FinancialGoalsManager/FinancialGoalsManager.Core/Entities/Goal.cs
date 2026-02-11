@@ -1,4 +1,5 @@
 using FinancialGoalsManager.Core.Enums;
+using FinancialGoalsManager.Core.VO;
 
 namespace FinancialGoalsManager.Core.Entities
 {
@@ -13,22 +14,22 @@ namespace FinancialGoalsManager.Core.Entities
             IsDeleted = false;
             _transactions = new List<Transaction>();
             Status = GoalStatus.InProgress;
+            Amount = new Payment(0m, "BRL");
         }
 
         public string Title { get; private set; } = string.Empty;
-        public decimal Amount { get; set; }
-        public decimal AmountGoal { get; private set; }
+        public Payment Amount { get; set; }
+        public Payment AmountGoal { get; private set; }
         public DateTime Deadline { get; private set; }
-        public decimal IdealMonthlyDeposit { get; private set; }
+        public Payment IdealMonthlyDeposit { get; private set; }
         public GoalStatus Status { get; private set; }
         public IReadOnlyCollection<Transaction> Transactions => _transactions.AsReadOnly();
-        public DateTime CreationDate { get; private set; }
-        public bool IsDeleted { get; private set; }
+
 
 
         #region Business methods
 
-        public static Goal Create(string title, decimal amount, decimal amountGoal, DateTime deadline, decimal idealMonthlyDeposit)
+        public static Goal Create(string title, Payment amount, Payment amountGoal, DateTime deadline, Payment idealMonthlyDeposit)
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentException("Title cannot be null or empty.", nameof(title));
@@ -52,7 +53,7 @@ namespace FinancialGoalsManager.Core.Entities
             return goal;
         }
 
-        public void Deposit(decimal amount, DateTime? transactionDate = null)
+        public void Deposit(Payment amount, DateTime? transactionDate = null)
         {
             EnsureNotDeleted();
             EnsureNotCanceled();
@@ -66,7 +67,7 @@ namespace FinancialGoalsManager.Core.Entities
             CompleteIfTargetReached();
         }
 
-        public void Withdraw(decimal amount, DateTime? transactionDate = null)
+        public void Withdraw(Payment amount, DateTime? transactionDate = null)
         {
             EnsureNotDeleted();
             EnsureNotCanceled();
@@ -152,7 +153,7 @@ namespace FinancialGoalsManager.Core.Entities
             Title = newTitle.Trim();
         }
 
-        public void UpdateAmountGoal(decimal newAmountGoal)
+        public void UpdateAmountGoal(Payment newAmountGoal)
         {
             EnsureNotDeleted();
             if (newAmountGoal <= 0)
@@ -168,7 +169,7 @@ namespace FinancialGoalsManager.Core.Entities
             Deadline = newDeadline;
         }
 
-        public void UpdateIdealMonthlyDeposit(decimal newIdeal)
+        public void UpdateIdealMonthlyDeposit(Payment newIdeal)
         {
             EnsureNotDeleted();
             if (newIdeal <= 0)

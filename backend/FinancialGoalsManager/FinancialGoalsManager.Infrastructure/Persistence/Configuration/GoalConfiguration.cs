@@ -24,16 +24,9 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Configuration
                    .HasForeignKey(t => t.GoalId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Property(g => g.AmountGoal)
-                     .IsRequired()
-                     .HasColumnType("decimal(18,2)");
-
             builder.Property(g => g.Deadline)
-                        .IsRequired(false);
+                        .IsRequired();
 
-            builder.Property(g => g.IdealMonthlyDeposit)
-                        .IsRequired(false)
-                        .HasColumnType("decimal(18,2)");
 
             builder.Property(g => g.Status)
                         .IsRequired();
@@ -44,7 +37,29 @@ namespace FinancialGoalsManager.Infrastructure.Persistence.Configuration
             builder.Property(g => g.IsDeleted)
                         .IsRequired();
 
+            builder.OwnsOne(g => g.Amount, a =>
+            {
+                a.Property(p => p.Amount)
+                 .HasColumnName("AmountValue")
+                 .HasColumnType("decimal(18,2)")
+                 .IsRequired();
+            });
 
+            builder.OwnsOne(g => g.AmountGoal, a =>
+            {
+                a.Property(p => p.Amount)
+                 .HasColumnName("AmountGoalValue")
+                 .HasColumnType("decimal(18,2)")
+                 .IsRequired();
+            });
+
+            builder.OwnsOne(g => g.IdealMonthlyDeposit, a =>
+            {
+                a.Property(p => p.Amount)
+                 .HasColumnName("IdealMonthlyDepositValue")
+                 .HasColumnType("decimal(18,2)")
+                 .IsRequired();
+            });
 
         }
     }
